@@ -2,10 +2,8 @@ export function createMarkup(arr) {
   return arr
     .map(
       arr =>
-        `<div class="photo-card">
-  <img src="${(arr.webformatURL, arr.largeImageURL)}" alt="${
-          arr.tags
-        }"  loading="lazy" height=100% />
+        `<div class="photo-card"><a href=${arr.largeImageURL}>
+  <img  class="gallery__image" src="${arr.webformatURL}" alt="${arr.tags}"  loading="lazy" height=100% /></a>
   <div class="info">
     <p class="info-item">
       <b>Likes</b> ${arr.likes}

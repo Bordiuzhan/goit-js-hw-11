@@ -7,6 +7,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const KEY = '30638186-bb770c9b9d6e6a40dc9ec3884';
 const BASE_URL = 'https://pixabay.com/api/';
+const lightbox = new SimpleLightbox(`.gallery a`);
 let page = 0;
 let inputValue = '';
 const ref = {
@@ -20,10 +21,8 @@ const option = {
   rootMargin: '50px',
   threshold: 1,
 };
-const lightbox = new SimpleLightbox(`.gallery a`);
 
 ref.form.addEventListener('submit', onSubmit);
-// ref.gallery.addEventListener('click', onOpenPicture);
 const observer = new IntersectionObserver(onLoad, option);
 
 function onSubmit(e) {
@@ -35,17 +34,16 @@ function onSubmit(e) {
     return;
   }
   insertMarkup(inputValue);
-  console.log(ref.gallery);
-  if (ref.gallery.firstElementChild) {
-    console.log('good');
-    const { height: cardHeight } =
-      ref.gallery.firstElementChild.getBoundingClientRect();
-
-    window.scrollBy({
-      top: cardHeight * 2,
-      behavior: 'smooth',
-    });
-  }
+}
+function onLoad(entries) {
+  entries.forEach(entry => {
+    console.log(entries);
+    if (entry.isIntersecting) {
+      page += 1;
+      insertMarkup(inputValue);
+      observer.unobserve(ref.guard);
+    }
+  });
 }
 
 function clearUI() {
@@ -75,7 +73,7 @@ async function insertMarkup(value) {
     const { height: cardHeight } =
       ref.gallery.firstElementChild.getBoundingClientRect();
     window.scrollBy({
-      top: cardHeight * 2,
+      top: 0,
       behavior: 'smooth',
     });
 
@@ -88,21 +86,3 @@ async function insertMarkup(value) {
     console.log(error);
   }
 }
-async function onLoad(entries) {
-  entries.forEach(entry => {
-    console.log(entries);
-    if (entry.isIntersecting) {
-      page += 1;
-      insertMarkup(inputValue);
-      observer.unobserve(ref.guard);
-    }
-  });
-}
-
-// function onOpenPicture(e) {
-//   e.preventDefault();
-//   console.log(instance.on('show.simplelightbox'));
-//   instance.on('show.simplelightbox');
-// }
-
-console.log('GO');
